@@ -53,7 +53,8 @@ the package from the command line:
      --prefix TEXT   A prefix to add to a new file name.
      --version       Show the version and exit.
      --help          Show this message and exit.
-   You can also run the command line interface with:
+
+You can also run the command line interface with:
 
 .. code:: bash
 
@@ -61,7 +62,7 @@ the package from the command line:
 
 Examples
 ~~~~~~~~
-Add a prefix to file(s):
+Add a prefix to files in the directory `tests/test_files`:
 
 .. code:: bash
 
