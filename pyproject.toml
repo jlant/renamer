@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "renamer"
+description = "Renamer is a tool that renames files in a directory based on a pattern along with other options."
+readme = "README.rst"
+requires-python = ">=3.9"
+dynamic = ["version"]
+authors = [
+  {name = "Jeremiah Lant", email = "jeremiahlant@gmail.com"}
+]
+maintainers = [
+  {name = "Jeremiah Lant", email = "jeremiahlant@gmail.com"}
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "click"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "flake8",
+    "black",
+    "isort",
+    "sphinx",
+]
+
+[project.scripts]
+renamer = "renamer.cli:cli"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.dynamic]
+version = {attr = "renamer.__version__"}
