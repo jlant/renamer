@@ -109,3 +109,6 @@ ENV/
 *.swo
 .vscode/
 .idea/
+
+# Project specific
+tests/test-files/*.txt
