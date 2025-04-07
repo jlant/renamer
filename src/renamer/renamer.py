@@ -5,10 +5,13 @@ options.
 
 """
 
+from datetime import datetime
 from pathlib import Path
 
 
-def rename_files(directory, pattern=None, prefix=None):
+def rename_files(
+    directory, pattern=None, prefix=None, date_format="%Y-%m-%d", dry_run=False
+):
     """Rename files in a DIRECTORY based on a pattern along with other options.
 
     Parameters
@@ -20,9 +23,14 @@ def rename_files(directory, pattern=None, prefix=None):
         It has the following placeholders:
             {index} - an incrementing number
             {original_name} - the original file name without the extension
+            {date} - the current date
         The default is None.
     prefix : str, optional
         A prefix to add to a new file name. The default is None.
+    date_format : str, optional
+        A date format to use with the {date} placeholder. The default is %Y-%m-%d
+    dry_run : bool, optional
+        A flag to show what the renaming result would be. The default is False.
 
     Raises
     ------
@@ -43,13 +51,16 @@ def rename_files(directory, pattern=None, prefix=None):
             original_name = file_path.stem
             extension = file_path.suffix
 
-            # Initially, use original file name with(out) extension
-            # new_name = file_path.name
+            # Initially, use original file name without extension
             new_name = original_name
 
             # Apply the pattern if provided
             if pattern:
-                new_name = pattern.format(index=index, original_name=original_name)
+                new_name = pattern.format(
+                    index=index,
+                    original_name=original_name,
+                    date=datetime.now().strftime(date_format),
+                )
 
             # Apply the prefix if provided
             if prefix:
@@ -61,8 +72,12 @@ def rename_files(directory, pattern=None, prefix=None):
             # Create the full file path for the new file
             new_file_path = directory_path / new_name
 
-            # Rename the original full file path with the new full file path
-            file_path.rename(new_file_path)
+            # Perform a dry run if provided
+            if dry_run:
+                print(f"[Dry run] Would rename: {file_path.name} -> {new_name}")
+            else:
+                # Rename the original full file path with the new full file path
+                file_path.rename(new_file_path)
 
 
 def main():
