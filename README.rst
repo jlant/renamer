@@ -38,12 +38,40 @@ the package from the command line:
 .. code:: bash
 
    renamer --help
+   Usage: renamer [OPTIONS] DIRECTORY
 
-You can also run the command line interface with:
+     Command line interface for renamer
+
+     Renamer is a tool that renames files in a directory based on a pattern along
+     with other options.
+
+     DIRECTORY is the path to the directory containing the files to rename.
+
+   Options:
+     --pattern TEXT  A pattern to apply when renaming with the following
+                     placeholders: {index}, {original_name}
+     --prefix TEXT   A prefix to add to a new file name.
+     --version       Show the version and exit.
+     --help          Show this message and exit.
+   You can also run the command line interface with:
 
 .. code:: bash
 
    python -m renamer --help
+
+Examples
+~~~~~~~~
+Add a prefix to file(s):
+
+.. code:: bash
+
+   renamer --prefix="new_" tests/test_files/
+
+Add a pattern using built-in placeholders `{index}` and `{original_name}`:
+
+.. code:: bash
+
+   renamer --pattern="{index}_{original_name}" tests/test_files
 
 Library
 ~~~~~~~
@@ -52,12 +80,10 @@ The Python package can be used as a library:
 .. code:: python
 
    >>> from renamer import renamer
-   >>> text = """
-   ... "You have power over your mind, not outside events.
-   ... Realize this, and you will find strength." by Marcus Aurelius
-   ... """
-   >>> renamer.count_words(text)
-   >>> {'You': 1, 'have': 1, 'power': 1, 'over': 1, 'your': 1, 'mind': 1, 'not': 1, 'outside': 1, 'events': 1, 'Realize': 1, 'this': 1, 'and': 1, 'you': 1, 'will': 1, 'find': 1, 'strength': 1, 'by': 1, 'Marcus': 1, 'Aurelius': 1}
+   >>> test_directory = Path("tests/test_files").resolve()
+   >>> pattern = "{index}_{original_name}_updated"
+   >>> prefix = "new_"
+   >>> rename_files(directory=test_directory, pattern=pattern, prefix=prefix)
 
 
 Authors
