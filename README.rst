@@ -65,7 +65,7 @@ Authors
 
 Development Lead
 ~~~~~~~~~~~~~~~~
-* Jeremiah Lant, jeremiahlant@gmail.com
+* Jeremiah Lant, jeremiah.lant@samtec.com
 
 Contributors
 ~~~~~~~~~~~~

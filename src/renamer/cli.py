@@ -1,41 +1,36 @@
-"""Command line interface for renamer
+"""Command line interface for renamer"""
 
-Notes
------
-Click is a great Python package for creating command line interfaces.
-
-Please see `Click documentation <https://click.palletsprojects.com/en/stable/>`_.
-"""
 import click
 
-import renamer
+from renamer import __version__, renamer
 
 
 @click.command()
-@click.option("--verbose", is_flag=True, help="Print additional details.")
-@click.version_option(renamer.__version__)
-def cli(verbose):
+@click.argument(
+    "directory", type=click.Path(exists=True, file_okay=False, dir_okay=True)
+)
+@click.option(
+    "--pattern",
+    default=None,
+    help="A pattern to apply when renaming with the following placeholders: {index}, {original_name}",
+)
+@click.option(
+    "--prefix",
+    default=None,
+    help="A prefix to add to a new file name.",
+)
+@click.version_option(__version__)
+def cli(directory, pattern, prefix):
     """Command line interface for renamer
 
-    Renamer is a tool that renames files in a directory based on a pattern along with other options.
+    Renamer is a tool that renames files in a directory based on a pattern along with
+    other options.
+
+    DIRECTORY is the path to the directory containing the files to rename.
     """
-    click.echo(
-        "This is the command line interface for "
-        "renamer"
-    )
-    click.echo("View help using option --help")
-    click.echo("Check version using option --version")
-    click.echo(
-        "Add Click commands and groups to the command line interface at "
-        "src/renamer/cli.py"
-    )
-    click.echo("See Click documenation at https://click.palletsprojects.com/en/stable/")
-    click.echo(
-        "Add your code as your see fit to the module at "
-        "src/renamer/renamer.py"
-    )
-    if verbose:
-        click.secho("VERBOSE mode is on", fg="green")
+    click.echo(f"Renaming files in: {directory}")
+    renamer.rename_files(directory=directory, pattern=pattern, prefix=prefix)
+    click.echo("Done.")
 
 
 if __name__ == "__main__":

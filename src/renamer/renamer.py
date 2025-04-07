@@ -1,76 +1,81 @@
 """Main module for renamer
 
-This is an example module with:
-* a module level docstring showing `numpydoc <https://numpydoc.readthedocs.io/en/latest/format.html>`_ style
-* an example function with a docstring and typing that counts the number of words from a text string
-* a ``if __name__ == "__main__":`` block to define code that should only be executed
-when the module is run directly, and not when it is imported
-
-Notes
------
-Code documentation follows `numpydoc <https://numpydoc.readthedocs.io/en/latest/format.html>`_ style
-
-See Also
---------
-`numpydoc example.py <https://numpydoc.readthedocs.io/en/latest/example.html#example>`_
-
-
-References
-----------
-Cite relevant references in this section.
-
-Such as this recommended paper: `Best Practices in Scientific Computing`_.
-
-.. _Best Practices in Scientific Computing: https://doi.org/10.1371/journal.pbio.1001745
+Renamer is a tool that renames files in a directory based on a pattern along with other
+options.
 
 """
-import string
-from collections import Counter
-from typing import Dict
+
+from pathlib import Path
 
 
-def count_words(text: str) -> Dict[str, int]:
-    """Count words in a given text string.
-
-    Count the number of words in a given text string, and return a dictionary
-    sorted by the number of words in descending order.
+def rename_files(directory, pattern=None, prefix=None):
+    """Rename files in a DIRECTORY based on a pattern along with other options.
 
     Parameters
     ----------
-    text : str
-        The text string.
+    directory : str
+        A path-like string to the directory containing the files to rename.
+    pattern : str, optional
+        A pattern to apply when renaming.
+        It has the following placeholders:
+            {index} - an incrementing number
+            {original_name} - the original file name without the extension
+        The default is None.
+    prefix : str, optional
+        A prefix to add to a new file name. The default is None.
 
-    Returns
-    -------
-    dict
-        The sorted dictionary mapping of word to word count
-
+    Raises
+    ------
+    ValueError
+        If the directory path provided is not a valid directory.
     """
-    words = text.split()
-    words_generator_object = (word.strip(string.punctuation) for word in words)
-    words_counter = Counter(words_generator_object)
-    words_dict = dict(words_counter)
-    words_dict_sorted = dict(
-            sorted(words_dict.items(), key=lambda item: item[1], reverse=True)
-    )
+    # Create a Path object
+    directory_path = Path(directory)
 
-    return words_dict_sorted
+    # Check directory path
+    if not directory_path.is_dir():
+        raise ValueError(f"{directory} is not a valid directory.")
+
+    # Loop through all the files in the directory provided and rename the files
+    # accordingly
+    for index, file_path in enumerate(sorted(directory_path.iterdir())):
+        if file_path.is_file():
+            original_name = file_path.stem
+            extension = file_path.suffix
+
+            # Initially, use original file name with(out) extension
+            # new_name = file_path.name
+            new_name = original_name
+
+            # Apply the pattern if provided
+            if pattern:
+                new_name = pattern.format(index=index, original_name=original_name)
+
+            # Apply the prefix if provided
+            if prefix:
+                new_name = f"{prefix}{new_name}"
+
+            # Add the extension
+            new_name = f"{new_name}{extension}"
+
+            # Create the full file path for the new file
+            new_file_path = directory_path / new_name
+
+            # Rename the original full file path with the new full file path
+            file_path.rename(new_file_path)
 
 
 def main():
     """Main function.
 
-    Output the count of words in a text string.
+    Example usage of the read_files function.
     """
-    text = """
-    "You have power over your mind, not outside events.
-    Realize this, and you will find strength." by Marcus Aurelius
-    """
-    words_dict = count_words(text)
-    output = "\n".join([f"{key} {value}" for key, value in words_dict.items()])
-    print(output)
+    test_directory = Path(__file__).resolve().parents[2] / "tests" / "test_files"
+    pattern = "{index}_{original_name}_hello"
+    prefix = "new_"
+
+    rename_files(directory=test_directory, pattern=pattern, prefix=prefix)
 
 
 if __name__ == "__main__":
     main()
-

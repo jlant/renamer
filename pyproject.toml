@@ -9,10 +9,10 @@ readme = "README.rst"
 requires-python = ">=3.9"
 dynamic = ["version"]
 authors = [
-  {name = "Jeremiah Lant", email = "jeremiahlant@gmail.com"}
+  {name = "Jeremiah Lant", email = "jeremiah.lant@samtec.com"}
 ]
 maintainers = [
-  {name = "Jeremiah Lant", email = "jeremiahlant@gmail.com"}
+  {name = "Jeremiah Lant", email = "jeremiah.lant@samtec.com"}
 ]
 classifiers = [
     "License :: OSI Approved :: MIT License",
